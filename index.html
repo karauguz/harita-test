@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harita Gösterimi</title>
+</head>
+<body>
+    <!-- Harita gömme kodunu buraya yapıştırın -->
+    <iframe id="mapFrame" width="640" height="480"></iframe>
+
+    <script>
+        function initMap() {
+            // Kullanıcının konum iznini al
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                    // Haritayı oluştur
+                    var map = new google.maps.Map(document.getElementById('mapFrame'), {
+                        center: userLocation,
+                        zoom: 10
+                    });
+
+                    // Harita içeriği
+                    var mapContent = '<iframe src="https://www.google.com/maps/d/embed?mid=1Hhw7eNCiKp7RX5DKHa6QORmoN2AWUn8&ehbc=2E312F" width="640" height="480"></iframe>';
+
+                    // Harita içeriğini haritaya ekleyin
+                    var infoWindow = new google.maps.InfoWindow({
+                        content: mapContent
+                    });
+
+                    // Kullanıcının konumu etrafında bir işaretçi ekleyin
+                    var marker = new google.maps.Marker({
+                        position: userLocation,
+                        map: map,
+                        title: 'Konumunuz'
+                    });
+
+                    // İşaretçiye tıklandığında bilgi penceresini gösterin
+                    marker.addListener('click', function() {
+                        infoWindow.open(map, marker);
+                    });
+                });
+            } else {
+                console.error("Tarayıcı konum izni desteklemiyor.");
+            }
+        }
+    </script>
+
+    <!-- Google Maps API'yi yükleyin -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
+</body>
+</html>
